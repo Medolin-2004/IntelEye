@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<title>AI Image Threat Detection</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+min-height:100vh;
+color:white;
+display:flex;
+flex-direction:column;
+align-items:center;
+padding:40px;
+
+}
+
+/* HEADER */
+
+header{
+
+text-align:center;
+margin-bottom:30px;
+
+}
+
+header h1{
+
+font-size:2.8rem;
+color:#00ffd5;
+
+}
+
+header p{
+
+color:#ccc;
+margin-top:6px;
+
+}
+
+/* MAIN CARD */
+
+.container{
+
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(12px);
+border-radius:20px;
+padding:35px;
+width:95%;
+max-width:1100px;
+box-shadow:0 20px 50px rgba(0,0,0,0.7);
+
+}
+
+/* FLEX LAYOUT */
+
+.main-grid{
+
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:30px;
+
+}
+
+/* UPLOAD AREA */
+
+.upload-area{
+
+border:2px dashed #00ffd5;
+border-radius:15px;
+padding:40px;
+text-align:center;
+cursor:pointer;
+transition:0.3s;
+
+}
+
+.upload-area:hover{
+
+background:rgba(0,255,213,0.08);
+
+}
+
+.upload-area input{
+
+display:none;
+
+}
+
+/* ICON */
+
+.upload-icon{
+
+font-size:50px;
+margin-bottom:10px;
+
+}
+
+/* PREVIEW */
+
+.preview img{
+
+max-width:100%;
+border-radius:12px;
+margin-top:10px;
+
+}
+
+/* BUTTON */
+
+button{
+
+margin-top:20px;
+background:#00ffd5;
+border:none;
+padding:12px 30px;
+border-radius:30px;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+
+}
+
+button:hover{
+
+background:#00bfa6;
+transform:scale(1.05);
+
+}
+
+/* RESULT PANEL */
+
+.result-panel{
+
+background:rgba(0,0,0,0.3);
+border-radius:15px;
+padding:20px;
+text-align:center;
+
+}
+
+.result-panel img{
+
+max-width:100%;
+border-radius:12px;
+margin-top:10px;
+
+}
+
+/* STATUS BOX */
+
+.status-box{
+
+margin-top:20px;
+padding:15px;
+border-radius:10px;
+font-weight:600;
+animation:pulse 2s infinite;
+
+}
+
+.safe{
+
+background:#0bbf5e;
+
+}
+
+.threat{
+
+background:#e63946;
+
+}
+
+.authorized{
+
+background:#f4a261;
+
+}
+
+/* ANIMATION */
+
+@keyframes pulse{
+
+0%{transform:scale(1)}
+
+50%{transform:scale(1.05)}
+
+100%{transform:scale(1)}
+
+}
+
+/* INFO PANEL */
+
+.info{
+
+margin-top:20px;
+font-size:14px;
+color:#ccc;
+
+}
+
+/* FOOTER */
+
+footer{
+
+margin-top:30px;
+font-size:14px;
+color:#aaa;
+
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+.main-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<header>
+
+<h1>🧠 AI Image Threat Detection</h1>
+
+<p>Weapon Detection • Face Recognition • Smart Threat Analysis</p>
+
+</header>
+
+
+<div class="container">
+
+
+<div class="main-grid">
+
+<!-- LEFT PANEL -->
+
+<div>
+
+<form method="POST" enctype="multipart/form-data">
+
+<label class="upload-area">
+
+<div class="upload-icon">📤</div>
+
+<p>Upload Image for AI Analysis</p>
+
+<input type="file" name="file" id="fileInput" accept="image/*" required>
+
+</label>
+
+
+<div class="preview">
+
+<img id="previewImage" style="display:none;">
+
+</div>
+
+
+<div style="text-align:center">
+
+<button type="submit">Run AI Prediction</button>
+
+</div>
+
+</form>
+
+
+<div class="info">
+
+<p>✔ Supports JPG, PNG</p>
+
+<p>✔ Detects Weapons and Faces</p>
+
+<p>✔ Smart Threat Analysis</p>
+
+</div>
+
+</div>
+
+
+<!-- RIGHT PANEL -->
+
+<div class="result-panel">
+
+<h2>Prediction Result</h2>
+
+{% if result %}
+
+<img src="{{ url_for('static', filename=result) }}">
+
+{% endif %}
+
+
+{% if offender_detected %}
+
+<div class="status-box threat">
+
+🚨 Offender Detected
+
+</div>
+
+{% endif %}
+
+
+{% if weapon_detected and not authorized_detected %}
+
+<div class="status-box threat">
+
+🚨 Weapon Threat Detected
+
+</div>
+
+{% endif %}
+
+
+{% if authorized_detected %}
+
+<div class="status-box authorized">
+
+🛡 Authorized Personnel Detected
+
+</div>
+
+{% endif %}
+
+
+{% if not weapon_detected and not offender_detected %}
+
+<div class="status-box safe">
+
+✅ No Threat Detected
+
+</div>
+
+{% endif %}
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<div style="margin-top:25px">
+
+<a href="{{ url_for('user_dashboard') }}"
+style="color:#00ffd5;text-decoration:none;font-weight:bold">
+
+⬅ Back to Dashboard
+
+</a>
+
+</div>
+
+
+<footer>
+
+</footer>
+
+
+<audio id="sirenAudio"
+src="{{ url_for('static', filename='siren.mp3') }}"
+preload="auto"></audio>
+
+
+<script>
+
+/* IMAGE PREVIEW */
+
+const input=document.getElementById("fileInput")
+const preview=document.getElementById("previewImage")
+
+input.onchange=function(e){
+
+const file=e.target.files[0]
+
+if(file){
+
+preview.src=URL.createObjectURL(file)
+preview.style.display="block"
+
+}
+
+}
+
+/* SIREN ALERT */
+
+let threat={{ 'true' if weapon_detected or offender_detected else 'false' }}
+
+if(threat){
+
+let siren=document.getElementById("sirenAudio")
+siren.play().catch(()=>{})
+
+}
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register - Surveillance System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 40px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      max-width: 420px;
+      width: 100%;
+      animation: fadeIn 1s ease;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 25px;
+      color: #00ffd5;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    select {
+      padding: 12px;
+      margin-bottom: 18px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    select {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    option {
+      color: #000;
+    }
+
+    input::placeholder {
+      color: #ccc;
+    }
+
+    button {
+      background: #00ffd5;
+      color: #000;
+      padding: 12px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: #00bfa6;
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 255, 213, 0.5);
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .link a {
+      color: #00ffd5;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .flash {
+      background-color: rgba(255, 0, 0, 0.2);
+      border: 1px solid red;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #ff8080;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Create Account</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+      <input type="text" name="username" placeholder="Choose a Username" required>
+      <input type="password" name="password" placeholder="Create a Password" required>
+      <select name="role" required>
+        <option value="" disabled selected>Select Role</option>
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+      <button type="submit">Register</button>
+    </form>
+
+    <div class="link">
+      <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+      <p><a href="{{ url_for('home') }}">Back to Home</a></p>
+    </div>
+  </div>
+</body>
+</html>

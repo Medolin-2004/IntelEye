@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<title>Detection Logs Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#141e30,#243b55);
+color:white;
+min-height:100vh;
+padding:40px;
+}
+
+/* HEADER */
+
+header{
+text-align:center;
+margin-bottom:30px;
+}
+
+header h1{
+font-size:2.6rem;
+color:#00ffd5;
+}
+
+header p{
+color:#ccc;
+margin-top:5px;
+}
+
+/* FILTER PANEL */
+
+.filters{
+display:flex;
+flex-wrap:wrap;
+gap:15px;
+justify-content:center;
+margin-bottom:25px;
+}
+
+.filters input{
+padding:10px;
+border:none;
+border-radius:10px;
+font-size:14px;
+outline:none;
+}
+
+/* COUNTER */
+
+.counter{
+text-align:center;
+margin-bottom:20px;
+font-weight:bold;
+color:#00ffd5;
+}
+
+/* LOG PANEL */
+
+.log-panel{
+max-width:1000px;
+margin:auto;
+background:rgba(255,255,255,0.06);
+backdrop-filter:blur(10px);
+border-radius:15px;
+padding:20px;
+box-shadow:0 12px 30px rgba(0,0,0,0.5);
+max-height:500px;
+overflow-y:auto;
+}
+
+/* LOG ITEM */
+
+.log-item{
+padding:12px;
+border-bottom:1px solid rgba(255,255,255,0.1);
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.log-item:last-child{
+border-bottom:none;
+}
+
+/* ALERT COLORS */
+
+.weapon{
+color:#ff4d4d;
+font-weight:bold;
+}
+
+.offender{
+color:#ffaa00;
+font-weight:bold;
+}
+
+/* TIMESTAMP */
+
+.timestamp{
+font-size:13px;
+color:#bbb;
+}
+
+/* BACK */
+
+.back{
+text-align:center;
+margin-top:30px;
+}
+
+.back a{
+color:#00ffd5;
+text-decoration:none;
+font-weight:bold;
+}
+
+/* SCROLLBAR */
+
+.log-panel::-webkit-scrollbar{
+width:8px;
+}
+
+.log-panel::-webkit-scrollbar-thumb{
+background:#00ffd5;
+border-radius:10px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:600px){
+
+.log-item{
+flex-direction:column;
+align-items:flex-start;
+gap:5px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>🚨 Detection Logs Dashboard</h1>
+<p>Security alert timeline and system events</p>
+
+</header>
+
+<div class="filters">
+
+<input type="text" id="searchInput" placeholder="Search logs...">
+
+<input type="date" id="dateFilter">
+
+</div>
+
+<div class="counter">
+
+Total Alerts: {{ logs|length }}
+<form method="POST" action="{{ url_for('clear_logs') }}" 
+      onsubmit="return confirm('Are you sure you want to delete ALL logs?')">
+
+<button style="
+background:#ff4d4d;
+border:none;
+padding:10px 20px;
+border-radius:20px;
+color:white;
+font-weight:bold;
+cursor:pointer;
+margin-bottom:20px;
+">
+
+Reset All Logs
+
+</button>
+
+</form>
+
+</div>
+
+<div class="log-panel" id="logPanel">
+
+{% for log in logs %}
+
+<div class="log-item" data-log="{{ log.lower() }}">
+
+<span class="log-text
+{% if 'weapon' in log.lower() %}weapon{% endif %}
+{% if 'offender' in log.lower() %}offender{% endif %}
+">
+{{ log }}
+</span>
+
+<span class="timestamp">
+
+{{ log.split(']')[0].replace('[','') }}
+
+</span>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<div class="back">
+
+<a href="{{ url_for('admin_dashboard') }}">⬅ Back to Admin Dashboard</a>
+
+</div>
+
+<script>
+
+/* SEARCH FILTER */
+
+const searchInput=document.getElementById("searchInput")
+
+searchInput.addEventListener("keyup",function(){
+
+let filter=this.value.toLowerCase()
+
+let logs=document.querySelectorAll(".log-item")
+
+logs.forEach(log=>{
+
+let text=log.getAttribute("data-log")
+
+if(text.includes(filter)){
+
+log.style.display="flex"
+
+}else{
+
+log.style.display="none"
+
+}
+
+})
+
+})
+
+/* DATE FILTER */
+
+const dateFilter=document.getElementById("dateFilter")
+
+dateFilter.addEventListener("change",function(){
+
+let date=this.value
+
+let logs=document.querySelectorAll(".log-item")
+
+logs.forEach(log=>{
+
+let text=log.getAttribute("data-log")
+
+if(text.includes(date)){
+
+log.style.display="flex"
+
+}else{
+
+log.style.display="none"
+
+}
+
+})
+
+})
+
+</script>
+
+</body>
+</html>

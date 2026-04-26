@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<title>Admin Dashboard | AI Surveillance</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#141e30,#243b55);
+color:white;
+min-height:100vh;
+display:flex;
+flex-direction:column;
+align-items:center;
+padding:40px;
+}
+
+/* HEADER */
+
+header{
+text-align:center;
+margin-bottom:40px;
+}
+
+header h1{
+font-size:2.8rem;
+color:#00ffd5;
+}
+
+header p{
+color:#ccc;
+margin-top:6px;
+}
+
+/* GRID DASHBOARD */
+
+.dashboard{
+
+width:100%;
+max-width:1200px;
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+
+gap:25px;
+
+animation:fadeIn 1s ease;
+
+}
+
+/* CARD */
+
+.card{
+
+background:rgba(255,255,255,0.06);
+
+backdrop-filter:blur(12px);
+
+padding:30px;
+
+border-radius:18px;
+
+text-align:center;
+
+box-shadow:0 12px 35px rgba(0,0,0,0.5);
+
+transition:0.3s;
+
+}
+
+.card:hover{
+
+transform:translateY(-6px);
+
+box-shadow:0 18px 45px rgba(0,0,0,0.6);
+
+}
+
+.card h2{
+
+margin-top:10px;
+
+margin-bottom:10px;
+
+color:#00ffd5;
+
+}
+
+.card p{
+
+font-size:14px;
+
+color:#ddd;
+
+margin-bottom:18px;
+
+}
+
+/* ICON */
+
+.icon{
+
+font-size:40px;
+
+}
+
+/* BUTTON */
+
+.card a{
+
+display:inline-block;
+
+background:#00ffd5;
+
+color:black;
+
+padding:10px 22px;
+
+border-radius:25px;
+
+text-decoration:none;
+
+font-weight:bold;
+
+transition:0.3s;
+
+}
+
+.card a:hover{
+
+background:#00bfa6;
+
+transform:scale(1.05);
+
+}
+
+/* LOGOUT */
+
+.logout{
+
+margin-top:40px;
+
+}
+
+.logout a{
+
+background:#ff4d4d;
+
+padding:10px 25px;
+
+border-radius:25px;
+
+color:white;
+
+text-decoration:none;
+
+font-weight:bold;
+
+}
+
+.logout a:hover{
+
+background:#e60000;
+
+}
+
+/* FOOTER */
+
+footer{
+
+margin-top:40px;
+
+font-size:13px;
+
+color:#aaa;
+
+}
+
+/* ANIMATION */
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>🛡 AI Surveillance Admin Panel</h1>
+
+<p>Smart Security Management Dashboard</p>
+
+</header>
+
+
+<div class="dashboard">
+
+<!-- Upload Offender -->
+
+<div class="card">
+
+<div class="icon">👤</div>
+
+<h2>Add Offender</h2>
+
+<p>Upload offender faces for threat detection.</p>
+
+<a href="{{ url_for('upload') }}">Upload Offender</a>
+
+</div>
+
+
+<!-- Upload Authorized -->
+
+<div class="card">
+
+<div class="icon">🛡</div>
+
+<h2>Add Authorized Personnel</h2>
+
+<p>Register police or army personnel allowed to carry weapons.</p>
+
+<a href="{{ url_for('upload_authorized') }}">Upload Authorized</a>
+
+</div>
+
+
+<!-- Offender Gallery -->
+
+<div class="card">
+
+<div class="icon">🖼</div>
+
+<h2>Offender Gallery</h2>
+
+<p>View and manage all offender face images.</p>
+
+<a href="{{ url_for('view_images') }}">View Gallery</a>
+
+</div>
+<div class="card">
+
+<div class="icon">🛡</div>
+
+<h2>Authorized Personnel</h2>
+
+<p>View registered police and army personnel.</p>
+
+<a href="{{ url_for('view_authorized') }}">View Authorized</a>
+
+</div>
+
+<!-- Logs -->
+
+<div class="card">
+
+<div class="icon">📜</div>
+
+<h2>Detection Logs</h2>
+
+<p>View security alerts and detection history.</p>
+
+<a href="{{ url_for('view_logs') }}">View Logs</a>
+
+</div>
+
+
+<!-- Live Surveillance -->
+
+<div class="card">
+
+<div class="icon">🎥</div>
+
+<h2>Live Surveillance</h2>
+
+<p>Monitor the real-time AI surveillance system.</p>
+
+<a href="{{ url_for('detect') }}">Open Monitor</a>
+
+</div>
+
+
+</div>
+
+
+<div class="logout">
+
+<a href="{{ url_for('logout') }}">Logout</a>
+
+</div>
+
+
+<footer>
+
+
+</footer>
+
+</body>
+</html>

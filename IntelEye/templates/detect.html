@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<title>Live AI Surveillance</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+
+body{
+font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+/* alert animation */
+
+.alert-box{
+animation:pulse 1.8s infinite;
+}
+
+@keyframes pulse{
+
+0%{transform:scale(1);opacity:1}
+
+50%{transform:scale(1.05);opacity:.85}
+
+100%{transform:scale(1);opacity:1}
+
+}
+
+</style>
+
+</head>
+
+
+<body class="bg-gradient-to-br from-gray-900 to-gray-800 text-white min-h-screen flex flex-col items-center p-6">
+
+<header class="w-full max-w-7xl flex justify-between items-center mb-6">
+
+<h1 class="text-3xl font-bold text-cyan-400">🛡 AI Surveillance System</h1>
+
+<a href="{{ url_for('logout') }}"
+class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded">
+Logout
+</a>
+
+</header>
+
+
+<!-- MAIN PANEL -->
+
+<section class="w-full max-w-7xl bg-gray-800 rounded-xl shadow-xl p-5">
+
+<div class="flex flex-col lg:flex-row gap-6">
+
+
+<!-- CAMERA FEED -->
+
+<div class="flex-1">
+
+<h2 class="text-xl font-semibold mb-2">🎥 Live Camera Feed</h2>
+
+<div class="border-4 border-green-500 rounded-lg overflow-hidden shadow-lg">
+
+<img src="{{ url_for('video_feed') }}"
+class="w-full object-cover">
+
+</div>
+
+</div>
+
+
+<!-- ALERT PANEL -->
+
+<div class="lg:w-1/3">
+
+<h2 class="text-xl font-semibold mb-2">🚨 Detection Status</h2>
+
+<div id="alertBox"
+class="alert-box bg-gray-700 p-6 rounded-lg text-center text-lg font-bold">
+
+System monitoring...
+
+</div>
+
+
+<!-- SYSTEM INFO -->
+
+<div class="mt-6 bg-gray-700 p-4 rounded-lg text-sm">
+
+<p><b>System Mode:</b> Smart Threat Detection</p>
+
+<p><b>Weapon Detection:</b> Active</p>
+
+<p><b>Face Recognition:</b> Active</p>
+
+<p><b>Authorized Personnel:</b> Enabled</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<footer class="text-gray-400 mt-10 text-sm">
+
+
+</footer>
+
+
+<!-- SIREN -->
+
+<audio id="sirenAudio"
+src="{{ url_for('static', filename='sounds/alarm.mp3') }}"
+preload="auto"></audio>
+
+
+<script>
+
+document.querySelector("footer").innerHTML =
+document.querySelector("footer").innerHTML.replace("{{ year }}",new Date().getFullYear())
+
+const alertBox=document.getElementById("alertBox")
+
+const sirenAudio=document.getElementById("sirenAudio")
+
+let sirenPlaying=false
+
+
+function updateAlert(){
+
+fetch("/get_alert")
+
+.then(res=>res.json())
+
+.then(data=>{
+
+let alert=data.alert.toLowerCase()
+
+alertBox.className="alert-box p-6 rounded-lg text-center text-lg font-bold"
+
+
+if(alert.includes("authorized")){
+
+alertBox.innerText=data.alert
+
+alertBox.classList.add("bg-yellow-500")
+
+stopSiren()
+
+}
+
+else if(alert.includes("weapon threat") || alert.includes("offender")){
+
+alertBox.innerText=data.alert
+
+alertBox.classList.add("bg-red-600")
+
+playSiren()
+
+}
+
+else{
+
+alertBox.innerText="No Threat Detected"
+
+alertBox.classList.add("bg-green-600")
+
+stopSiren()
+
+}
+
+})
+
+.catch(()=>{
+
+alertBox.innerText="Connection Error"
+
+alertBox.classList.add("bg-orange-500")
+
+})
+
+}
+
+
+function playSiren(){
+
+if(!sirenPlaying){
+
+sirenAudio.play().catch(()=>{})
+
+sirenPlaying=true
+
+}
+
+}
+
+
+function stopSiren(){
+
+if(sirenPlaying){
+
+sirenAudio.pause()
+
+sirenAudio.currentTime=0
+
+sirenPlaying=false
+
+}
+
+}
+
+
+setInterval(updateAlert,2000)
+
+</script>
+
+</body>
+</html>

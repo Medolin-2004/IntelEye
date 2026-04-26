@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<title>Authorized Personnel Gallery</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#141e30,#243b55);
+color:white;
+min-height:100vh;
+padding:40px;
+}
+
+/* HEADER */
+
+header{
+text-align:center;
+margin-bottom:30px;
+}
+
+header h1{
+font-size:2.5rem;
+color:#00ffd5;
+}
+
+header p{
+color:#ccc;
+margin-top:5px;
+}
+
+/* GRID */
+
+.gallery{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+}
+
+/* CARD */
+
+.card{
+background:rgba(255,255,255,0.06);
+backdrop-filter:blur(12px);
+padding:15px;
+border-radius:15px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,0.5);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-4px);
+}
+
+/* IMAGE */
+
+.card img{
+width:200px;
+height:200px;
+object-fit:cover;
+border-radius:10px;
+margin:auto;
+display:block;
+}
+
+/* NAME */
+
+.card h3{
+margin-top:12px;
+color:#00ffd5;
+font-size:18px;
+}
+
+/* DELETE BUTTON */
+
+.delete-btn{
+margin-top:10px;
+background:#ff4d4d;
+border:none;
+padding:8px 16px;
+border-radius:20px;
+color:white;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+.delete-btn:hover{
+background:#e60000;
+}
+
+/* BACK BUTTON */
+
+.back{
+text-align:center;
+margin-top:35px;
+}
+
+.back a{
+color:#00ffd5;
+text-decoration:none;
+font-weight:bold;
+}
+
+.back a:hover{
+text-decoration:underline;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>🛡 Authorized Personnel</h1>
+
+<p>Manage police and army personnel registered in the system</p>
+
+</header>
+
+
+<div class="gallery">
+
+{% for person in personnel %}
+
+<div class="card">
+
+<img src="{{ url_for('static', filename='authorized/' + person.filename) }}">
+
+<h3>{{ person.name }}</h3>
+
+<form method="POST" action="{{ url_for('delete_authorized_image') }}">
+
+<input type="hidden" name="filename" value="{{ person.filename }}">
+
+<button class="delete-btn">Delete</button>
+
+</form>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+
+<div class="back">
+
+<a href="{{ url_for('admin_dashboard') }}">⬅ Back to Admin Dashboard</a>
+
+</div>
+
+</body>
+</html>
